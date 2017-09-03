@@ -22,7 +22,8 @@ func main() {
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name: "package,p",
+				Name:    "p",
+				Aliases: []string{"package"},
 			},
 		},
 
