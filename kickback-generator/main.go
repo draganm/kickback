@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	reactor "github.com/draganm/go-reactor"
@@ -76,7 +77,14 @@ func main() {
 				},
 			}
 
-			for n, dm := range dms {
+			modelNames := []string{}
+
+			for n := range dms {
+				modelNames = append(modelNames, n)
+			}
+
+			for _, n := range modelNames {
+				dm := dms[n]
 				decls = append(decls, modelDecl(n, dm))
 			}
 
@@ -187,7 +195,15 @@ func displayModelToAST(dm *reactor.DisplayModel) *ast.UnaryExpr {
 
 func attributesMapAST(m map[string]interface{}) *ast.KeyValueExpr {
 	elts := []ast.Expr{}
-	for k, v := range m {
+
+	keys := []string{}
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		v := m[k]
 		elts = append(
 			elts,
 			&ast.KeyValueExpr{
