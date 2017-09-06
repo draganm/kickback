@@ -9,12 +9,12 @@ import (
 )
 
 type Context struct {
-	ScreenContext reactor.ScreenContext
-	DB            *immersadb.ImmersaDB
-	MountFunc     func()
-	UserEventFunc func(*reactor.UserEvent)
-	UnmountFunc   func()
-	listeners     []*listener
+	ScreenContext   reactor.ScreenContext
+	DB              *immersadb.ImmersaDB
+	MountFunc       func()
+	OnUserEventFunc func(*reactor.UserEvent)
+	UnmountFunc     func()
+	listeners       []*listener
 }
 
 type listener struct {
@@ -53,8 +53,8 @@ func (c *Context) Unmount() {
 }
 
 func (c *Context) OnUserEvent(evt *reactor.UserEvent) {
-	if c.UserEventFunc != nil {
-		c.UserEventFunc(evt)
+	if c.OnUserEventFunc != nil {
+		c.OnUserEventFunc(evt)
 	}
 }
 

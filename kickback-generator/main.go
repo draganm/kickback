@@ -36,15 +36,16 @@ func main() {
 			}
 
 			files := []string{}
-			err := filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
-				if err != nil {
-					return fmt.Errorf("Error listing %s: %s", path, err)
+			fileInfos, err := ioutil.ReadDir(".")
+			if err != nil {
+				return err
+			}
+
+			for _, info := range fileInfos {
+				if strings.HasSuffix(info.Name(), ".xml") && !info.IsDir() {
+					files = append(files, info.Name())
 				}
-				if strings.HasSuffix(path, ".xml") && !info.IsDir() {
-					files = append(files, path)
-				}
-				return nil
-			})
+			}
 
 			if err != nil {
 				return err
@@ -82,6 +83,8 @@ func main() {
 			for n := range dms {
 				modelNames = append(modelNames, n)
 			}
+
+			sort.Strings(modelNames)
 
 			for _, n := range modelNames {
 				dm := dms[n]
